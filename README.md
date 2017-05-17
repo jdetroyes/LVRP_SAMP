@@ -15,7 +15,8 @@ https://sa-mp-fr.com/files/file/171-la-vie-roleplay-final/
 ## Installation ##
 Télécharger ou cloner le repo.
 
-Configurer la la base de données
+Importer la base de données vers votre serveur SQL puis configurer la la base de données dans le GameMode 
+
 ```pawn
 // Identifiants MySQL
 #define MYSQL_HOST "127.0.0.1"                                  		
@@ -23,3 +24,4 @@ Configurer la la base de données
 #define MYSQL_PASS ""                                  
 #define MYSQL_DB   ""                                        
 ```
+Lancez samp-server.exe
