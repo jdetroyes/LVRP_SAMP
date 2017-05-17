@@ -2,7 +2,7 @@
 
 ## Description ##
 
-Mode de jeu développé ne Pawn fonctionnant sous SA-MP.
+Mode de jeu développé en Pawn fonctionnant sous SA-MP. (http://sa-mp.com/)
 
 ## Requis ##
 * [Mysql Plugin r38 ou plus](http://forum.sa-mp.com/showthread.php?t=56564)
