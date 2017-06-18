@@ -1,25 +1,27 @@
 /*
 ================================================================================
+NOM DU SERVEUR : La Vie RolePlay Final 5.0.1
+UPDATE : 18/06/2017
+FILE : http://sa-mp-fr.com/files/file/171-la-vie-roleplay-final/
+GITHUB : https://github.com/DarkRider29/LVRP_SAMP
 
 => La Vie RolePlay ©
-- Scripteur : Dark_Rider
+- Développeur : DarkRider
 - Mappeur : Lurtz59
-- Sauveur : Steven
-- Version SA:MP : 0.3.7
+- Version SA:MP : 0.3.7-R2
 - Base : u2c
-- Mysql : R38
+- Mysql : R41-2
+- Streamer : v2.9.1
 
 => Credits du GameMode :
 - La Vie RôlePlay
 - SA-MP forum
 - Dark_Rider29
 - Lurtz59
-- Steven
-- Abdel Ali
+ [Respectez les crédits merci]
 
-=> Site Officiel :
-- http://www.lvrp.fr/
-
+=> Sites Officiels :
+- http://www.lvrp.eu/ & http://www.lvrp.fr/
 ================================================================================
 */
 #include <a_samp>
