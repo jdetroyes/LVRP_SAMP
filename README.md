@@ -5,8 +5,8 @@
 Mode de jeu développé en Pawn fonctionnant sous SA-MP. (http://sa-mp.com/)
 
 ## Requis ##
-* [Mysql Plugin r38 ou plus](http://forum.sa-mp.com/showthread.php?t=56564)
-* [Streamer Plugin 2.7.7 ou plus](http://forum.sa-mp.com/showthread.php?t=102865)
+* [Mysql Plugin r41-2 ou plus](http://forum.sa-mp.com/showthread.php?t=56564)
+* [Streamer Plugin 2.9.1 ou plus](http://forum.sa-mp.com/showthread.php?t=102865)
 * [Encrypt Plugin](http://forum.sa-mp.com/showthread.php?t=152682)
 
 ## Documentation ##
