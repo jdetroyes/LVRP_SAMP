@@ -1,7 +1,7 @@
 /*
 ================================================================================
-NOM DU SERVEUR : La Vie RolePlay Final 5.0.1
-UPDATE : 18/06/2017
+NOM DU SERVEUR : La Vie RolePlay Final 5.0.2
+UPDATE : 28/07/2017
 FILE : http://sa-mp-fr.com/files/file/171-la-vie-roleplay-final/
 GITHUB : https://github.com/DarkRider29/LVRP_SAMP
 
@@ -26,16 +26,9 @@ GITHUB : https://github.com/DarkRider29/LVRP_SAMP
 */
 /*
 
-UPDATE v5.0.1 :
-- mise à jour du plugin mysql en version R41-2
-- mise à jour du streamer v2.9.1
-- remise en place de la commande /a changernom en jeu
-- remise en place du système de trashcar
-- protection de certaines commandes admin
-- correction du problème d'ID
-- passage des actors en dynamicActor
-- mise à jour de la bdd
-- minor changes
+UPDATE v5.0.2 :
+
+Fix loading string from DataBase
 
 */
 /*
@@ -5517,7 +5510,7 @@ stock uniquebizz_UpdateInfos(bizzid)
 			if(sbizz[bizzid][ubEnterPrice] <= 0)
 			    {format(string, sizeof(string), "[%s]\n{FFFFFF}Touche 'F'",sbizz[bizzid][ubMessage]);}
 			else
-				{format(string, sizeof(string), "%s\n{6E65FF}Prix d'entrée :{FFFFFF} $%d\n{FFFFFF}Touche 'F'",sbizz[bizzid][ubMessage],sbizz[bizzid][ubEnterPrice]);}
+				{format(string, sizeof(string), "[%s]\n{6E65FF}Prix d'entrée :{FFFFFF} $%d\n{FFFFFF}Touche 'F'",sbizz[bizzid][ubMessage],sbizz[bizzid][ubEnterPrice]);}
 		}
 		uniquebizz_Pickup[bizzid] = CreateDynamicPickup(1239, 1, sbizz[bizzid][ubEntrance_x], sbizz[bizzid][ubEntrance_y], sbizz[bizzid][ubEntrance_z],0,0,-1,PICKUP_STREAM_DISTANCE);
 		uniquebizz_Label[bizzid] = CreateDynamic3DTextLabel(string,0x6E65FFF6,sbizz[bizzid][ubEntrance_x], sbizz[bizzid][ubEntrance_y], sbizz[bizzid][ubEntrance_z],20.0,INVALID_PLAYER_ID,INVALID_VEHICLE_ID,0,0,0,-1,LABEL_STREAM_DISTANCE);
@@ -9075,13 +9068,13 @@ stock SetPlayerCriminal(playerid,temoin,victim,reason[],nb)
 		{
   			cache_get_value_name_int(0,"Arrested", nbarested);
 		    cache_get_value_name_int(0,"Crimes", nbcrimes);
-			cache_get_value_name(0,"Crime1", Field);
+			cache_get_value_name(0,"Crime1", Field, 128);
 			mysql_escape_string(Field, crime1, sizeof(crime1), MYSQL);
-			cache_get_value_name(0,"Crime2",Field);
+			cache_get_value_name(0,"Crime2",Field, 128);
 			mysql_escape_string(Field, crime2, sizeof(crime2), MYSQL);
-			cache_get_value_name(0,"Crime3",Field);
+			cache_get_value_name(0,"Crime3",Field, 128);
 			mysql_escape_string(Field, crime3, sizeof(crime3), MYSQL);
-			cache_get_value_name(0,"Crime4",crime4);
+			cache_get_value_name(0,"Crime4",crime4, 128);
 			mysql_escape_string(Field, crime4, sizeof(crime4), MYSQL);
 		}
 		nbcrimes++;
@@ -9142,13 +9135,13 @@ stock phone_SMS(playerid,giveplayerid,text[])
 	  	new count = 0;
 		if(cache_get_row_count(count) && count > 0)
 		{
-			cache_get_value_name(0,"SMS_Sent_Msg1",Field);
+			cache_get_value_name(0,"SMS_Sent_Msg1", Field, 64);
 			mysql_escape_string(Field, sms1);
-			cache_get_value_name(0,"SMS_Sent_Msg2",Field);
+			cache_get_value_name(0,"SMS_Sent_Msg2",Field, 64);
 			mysql_escape_string(Field, sms2);
-			cache_get_value_name(0,"SMS_Sent_Msg3",Field);
+			cache_get_value_name(0,"SMS_Sent_Msg3",Field, 64);
 			mysql_escape_string(Field, sms3);
-			cache_get_value_name(0,"SMS_Sent_Msg4",Field);
+			cache_get_value_name(0,"SMS_Sent_Msg4",Field, 64);
 			mysql_escape_string(Field, sms4);
 			cache_get_value_name_int(0,"SMS_Sent_Num1", num[0]);
 			cache_get_value_name_int(0,"SMS_Sent_Num2", num[1]);
@@ -9167,13 +9160,13 @@ stock phone_SMS(playerid,giveplayerid,text[])
 	  	mysql_query(MYSQL,sql);
 		if(cache_get_row_count(count) && count > 0)
 		{
-			cache_get_value_name(0,"SMS_Received_Msg1",Field);
+			cache_get_value_name(0,"SMS_Received_Msg1",Field, 64);
 			mysql_escape_string(Field, sms1);
-			cache_get_value_name(0,"SMS_Received_Msg2",Field);
+			cache_get_value_name(0,"SMS_Received_Msg2",Field, 64);
 			mysql_escape_string(Field, sms2);
-			cache_get_value_name(0,"SMS_Received_Msg3",Field);
+			cache_get_value_name(0,"SMS_Received_Msg3",Field, 64);
 			mysql_escape_string(Field, sms3);
-			cache_get_value_name(0,"SMS_Received_Msg4",Field);
+			cache_get_value_name(0,"SMS_Received_Msg4",Field, 64);
 			mysql_escape_string(Field, sms4);
 			cache_get_value_name_int(0,"SMS_Received_Num1", num[0]);
 			cache_get_value_name_int(0,"SMS_Received_Num2", num[1]);
@@ -9648,19 +9641,19 @@ public faction_Load()
         cache_get_value_name_int(i,"Cash", FactionInfo[i][fCash]);
         cache_get_value_name_float(i,"Armour", FactionInfo[i][fArmour]);
   		cache_get_value_name_int(i,"Interior", FactionInfo[i][fInt]);
-        cache_get_value_name(i,"Name",FactionInfo[i][fName]);
+        cache_get_value_name(i,"Name",FactionInfo[i][fName], 32);
         cache_get_value_name_int(i,"Locked", FactionInfo[i][fLock]);
         cache_get_value_name_int(i,"Owned", FactionInfo[i][fOwned]);
         cache_get_value_name_int(i,"Type", FactionInfo[i][fType]);
         cache_get_value_name_int(i,"Color", FactionInfo[i][fColor]);
         cache_get_value_name_int(i,"ChooseColor", FactionInfo[i][fChoseColor]);
         cache_get_value_name_int(i,"VW", FactionInfo[i][fWV]);
-        cache_get_value_name(i,"Rank1",FactionInfo[i][fRank1]);
-        cache_get_value_name(i,"Rank2",FactionInfo[i][fRank2]);
-        cache_get_value_name(i,"Rank3",FactionInfo[i][fRank3]);
-        cache_get_value_name(i,"Rank4",FactionInfo[i][fRank4]);
-        cache_get_value_name(i,"Rank5",FactionInfo[i][fRank5]);
-        cache_get_value_name(i,"Rank6",FactionInfo[i][fRank6]);
+        cache_get_value_name(i,"Rank1",FactionInfo[i][fRank1], 32);
+        cache_get_value_name(i,"Rank2",FactionInfo[i][fRank2], 32);
+        cache_get_value_name(i,"Rank3",FactionInfo[i][fRank3], 32);
+        cache_get_value_name(i,"Rank4",FactionInfo[i][fRank4], 32);
+        cache_get_value_name(i,"Rank5",FactionInfo[i][fRank5], 32);
+        cache_get_value_name(i,"Rank6",FactionInfo[i][fRank6], 32);
         cache_get_value_name_int(i,"RobTime", FactionInfo[i][fRobTime]);
         cache_get_value_name_int(i,"iM1", FactionInfo[i][fItemM][0]);
         cache_get_value_name_int(i,"iQ1", FactionInfo[i][fItemQ][0]);
@@ -9904,12 +9897,12 @@ public sannews_Load()
 	{
 		cache_get_value_name_int(0,"Cash", sanNews[abc_Cash]);
 		cache_get_value_name_int(0,"SMS", sanNews[abc_SMS]);
-	    cache_get_value_name(0,"Rank1",sanNews[rank1]);
-	    cache_get_value_name(0,"Rank2",sanNews[rank2]);
-	    cache_get_value_name(0,"Rank3",sanNews[rank3]);
-	    cache_get_value_name(0,"Rank4",sanNews[rank4]);
-	    cache_get_value_name(0,"Rank5",sanNews[rank5]);
-	    cache_get_value_name(0,"Rank6",sanNews[rank6]);
+	    cache_get_value_name(0,"Rank1",sanNews[rank1], 32);
+	    cache_get_value_name(0,"Rank2",sanNews[rank2], 32);
+	    cache_get_value_name(0,"Rank3",sanNews[rank3], 32);
+	    cache_get_value_name(0,"Rank4",sanNews[rank4], 32);
+	    cache_get_value_name(0,"Rank5",sanNews[rank5], 32);
+	    cache_get_value_name(0,"Rank6",sanNews[rank6], 32);
 	}
 	return 1;
 }
@@ -9935,13 +9928,13 @@ stock fbi_Load()
 	new count = 0;
 	if(cache_get_row_count(count) && count > 0)
 	{
-	    cache_get_value_name(0,"Rank1",FBIInfo[rank1]);
-	    cache_get_value_name(0,"Rank2",FBIInfo[rank2]);
-	    cache_get_value_name(0,"Rank3",FBIInfo[rank3]);
-	    cache_get_value_name(0,"Rank4",FBIInfo[rank4]);
-	    cache_get_value_name(0,"Rank5",FBIInfo[rank5]);
-	    cache_get_value_name(0,"Rank6",FBIInfo[rank6]);
-	    cache_get_value_name(0,"Rank7",FBIInfo[rank7]);
+	    cache_get_value_name(0,"Rank1",FBIInfo[rank1], 32);
+	    cache_get_value_name(0,"Rank2",FBIInfo[rank2], 32);
+	    cache_get_value_name(0,"Rank3",FBIInfo[rank3], 32);
+	    cache_get_value_name(0,"Rank4",FBIInfo[rank4], 32);
+	    cache_get_value_name(0,"Rank5",FBIInfo[rank5], 32);
+	    cache_get_value_name(0,"Rank6",FBIInfo[rank6], 32);
+	    cache_get_value_name(0,"Rank7",FBIInfo[rank7], 32);
 	    cache_get_value_name_int(0,"Skin1", FBIInfo[skin][0]);
 	    cache_get_value_name_int(0,"Skin2", FBIInfo[skin][1]);
 	    cache_get_value_name_int(0,"Skin3", FBIInfo[skin][2]);
@@ -10014,12 +10007,12 @@ public governement_Load()
 {
 	for (new i=0; i<4; i++)
 	{
-		cache_get_value_name(i,"rank1",governement[i][rank1]);
-		cache_get_value_name(i,"rank2",governement[i][rank2]);
-		cache_get_value_name(i,"rank3",governement[i][rank3]);
-		cache_get_value_name(i,"rank4",governement[i][rank4]);
-		cache_get_value_name(i,"rank5",governement[i][rank5]);
-		cache_get_value_name(i,"rank6",governement[i][rank6]);
+		cache_get_value_name(i,"rank1",governement[i][rank1], 32);
+		cache_get_value_name(i,"rank2",governement[i][rank2], 32);
+		cache_get_value_name(i,"rank3",governement[i][rank3], 32);
+		cache_get_value_name(i,"rank4",governement[i][rank4], 32);
+		cache_get_value_name(i,"rank5",governement[i][rank5], 32);
+		cache_get_value_name(i,"rank6",governement[i][rank6], 32);
 	    cache_get_value_name_int(i,"interior", governement[i][interior]);
 	    cache_get_value_name_int(i,"safe", governement[i][safe]);
 	    cache_get_value_name_int(i,"ticket", governement[i][ticket]);
@@ -10105,12 +10098,12 @@ stock fire_Load()
 	new count = 0;
 	if(cache_get_row_count(count) && count > 0)
 	{
-	    cache_get_value_name(0,"Rank1",FireInfo[rank1],1,32);
-	    cache_get_value_name(0,"Rank2",FireInfo[rank2],1,32);
-	    cache_get_value_name(0,"Rank3",FireInfo[rank3],1,32);
-	    cache_get_value_name(0,"Rank4",FireInfo[rank4],1,32);
-	    cache_get_value_name(0,"Rank5",FireInfo[rank5],1,32);
-	    cache_get_value_name(0,"Rank6",FireInfo[rank6],1,32);
+	    cache_get_value_name(0,"Rank1",FireInfo[rank1],32);
+	    cache_get_value_name(0,"Rank2",FireInfo[rank2],32);
+	    cache_get_value_name(0,"Rank3",FireInfo[rank3],32);
+	    cache_get_value_name(0,"Rank4",FireInfo[rank4],32);
+	    cache_get_value_name(0,"Rank5",FireInfo[rank5],32);
+	    cache_get_value_name(0,"Rank6",FireInfo[rank6],32);
 	    FireInfo[skin][0] = cache_get_value_name_int(0,"Skin1");
 	    FireInfo[skin][1] = cache_get_value_name_int(0,"Skin2");
 	    FireInfo[skin][2] = cache_get_value_name_int(0,"Skin3");
@@ -10196,12 +10189,12 @@ stock mecano_Load()
 	new count = 0;
 	if(cache_get_row_count(count) && count > 0)
 	{
-	    cache_get_value_name(0,"Rank1",MecanoInfo[rank1],1,32);
-	    cache_get_value_name(0,"Rank2",MecanoInfo[rank2],1,32);
-	    cache_get_value_name(0,"Rank3",MecanoInfo[rank3],1,32);
-	    cache_get_value_name(0,"Rank4",MecanoInfo[rank4],1,32);
-	    cache_get_value_name(0,"Rank5",MecanoInfo[rank5],1,32);
-	    cache_get_value_name(0,"Rank6",MecanoInfo[rank6],1,32);
+	    cache_get_value_name(0,"Rank1",MecanoInfo[rank1],32);
+	    cache_get_value_name(0,"Rank2",MecanoInfo[rank2],32);
+	    cache_get_value_name(0,"Rank3",MecanoInfo[rank3],32);
+	    cache_get_value_name(0,"Rank4",MecanoInfo[rank4],32);
+	    cache_get_value_name(0,"Rank5",MecanoInfo[rank5],32);
+	    cache_get_value_name(0,"Rank6",MecanoInfo[rank6],32);
 	    MecanoInfo[skin][0] = cache_get_value_name_int(0,"Skin1");
 	    MecanoInfo[skin][1] = cache_get_value_name_int(0,"Skin2");
 	    MecanoInfo[skin][2] = cache_get_value_name_int(0,"Skin3");
@@ -10279,14 +10272,14 @@ public police_Load()
 {
 	for (new i=0; i<4; i++)
 	{
-		cache_get_value_name(i,"Rank1",police[i][rank1]);
-	    cache_get_value_name(i,"Rank2",police[i][rank2]);
-	    cache_get_value_name(i,"Rank3",police[i][rank3]);
-	    cache_get_value_name(i,"Rank4",police[i][rank4]);
-	    cache_get_value_name(i,"Rank5",police[i][rank5]);
-	    cache_get_value_name(i,"Rank6",police[i][rank6]);
-	    cache_get_value_name(i,"Rank7",police[i][rank7]);
-	    cache_get_value_name(i,"Rank8",police[i][rank8]);
+		cache_get_value_name(i,"Rank1",police[i][rank1], 32);
+	    cache_get_value_name(i,"Rank2",police[i][rank2], 32);
+	    cache_get_value_name(i,"Rank3",police[i][rank3], 32);
+	    cache_get_value_name(i,"Rank4",police[i][rank4], 32);
+	    cache_get_value_name(i,"Rank5",police[i][rank5], 32);
+	    cache_get_value_name(i,"Rank6",police[i][rank6], 32);
+	    cache_get_value_name(i,"Rank7",police[i][rank7], 32);
+	    cache_get_value_name(i,"Rank8",police[i][rank8], 32);
 	    cache_get_value_name_int(i,"Interior", police[i][interior]);
 	    for(new a=0; a<12; a++)
 	    {
@@ -10355,7 +10348,7 @@ public police_FineLoad()
 	for (new i=0; i<totalFines; i++)
 	{
 		created = 0;
-		cache_get_value_name(i,"Name",fine[i][tmpName]);
+		cache_get_value_name(i,"Name",fine[i][tmpName], 32);
 	 	cache_get_value_name_int(i,"Price", fine[i][price]);
 		cache_get_value_name_int(i,"Created", created);
 		fine[i][used] = !!created;
@@ -10539,8 +10532,8 @@ public bizz_Load()
 		cache_get_value_name_float(i,"Exit_x", bizz[i][pos][3]);
 		cache_get_value_name_float(i,"Exit_y", bizz[i][pos][4]);
 		cache_get_value_name_float(i,"Exit_z", bizz[i][pos][5]);
-		cache_get_value_name(i,"Owner",bizz[i][owner]);
-		cache_get_value_name(i,"Message",bizz[i][description]);
+		cache_get_value_name(i,"Owner",bizz[i][owner], 64);
+		cache_get_value_name(i,"Message",bizz[i][description], 64);
 		cache_get_value_name_int(i,"Caisse", bizz[i][fund]);
 		cache_get_value_name_int(i,"EnterPrice", bizz[i][enterCost]);
 		cache_get_value_name_int(i,"Price", bizz[i][price]);
@@ -10617,8 +10610,8 @@ public house_Load()
 		cache_get_value_name_float(i,"Exit_x", house[i][pos][3]);
 		cache_get_value_name_float(i,"Exit_y", house[i][pos][4]);
 		cache_get_value_name_float(i,"Exit_z", house[i][pos][5]);
-		cache_get_value_name(i,"Owner",house[i][owner]);
-		cache_get_value_name(i,"Message",house[i][description]);
+		cache_get_value_name(i,"Owner",house[i][owner], 32);
+		cache_get_value_name(i,"Message",house[i][description], 64);
 		cache_get_value_name_int(i,"Owned", house[i][owned]);
 		cache_get_value_name_int(i,"Price", house[i][price]);
 		cache_get_value_name_int(i,"Assurance", house[i][insurance]);
@@ -10834,8 +10827,8 @@ public uniquebizz_Load()
 	    cache_get_value_name_float(i,"Exit_x", sbizz[i][ubExit_x]);
 	    cache_get_value_name_float(i,"Exit_y", sbizz[i][ubExit_y]);
 	    cache_get_value_name_float(i,"Exit_z", sbizz[i][ubExit_z]);
-	    cache_get_value_name(i,"Owner",sbizz[i][ubOwner]);
-		cache_get_value_name(i,"Message",sbizz[i][ubMessage]);
+	    cache_get_value_name(i,"Owner",sbizz[i][ubOwner], 64);
+		cache_get_value_name(i,"Message",sbizz[i][ubMessage], 64);
 	    cache_get_value_name_int(i,"Caisse", sbizz[i][ubCaisse]);
 	    cache_get_value_name_int(i,"EnterPrice", sbizz[i][ubEnterPrice]);
 	    cache_get_value_name_int(i,"Price", sbizz[i][ubPrix]);
@@ -11286,7 +11279,7 @@ public stop_Load()
 	for (new i=0; i<totalBusStop; i++)
 	{
 		cache_get_value_name_int(i,"Created", stop[i][used]);
-		cache_get_value_name(i,"Name",stop[i][description]);
+		cache_get_value_name(i,"Name",stop[i][description], 64);
 		cache_get_value_name_float(i,"Pos_x", stop[i][pos][0]);
 		cache_get_value_name_float(i,"Pos_y", stop[i][pos][1]);
 		cache_get_value_name_float(i,"Pos_z", stop[i][pos][2]);
@@ -11312,7 +11305,7 @@ public gps_Load()
 	cache_get_row_count(totalGPS);
 	for (new i=0; i<totalGPS; i++)
 	{
- 		cache_get_value_name(i,"Name",gps[i][description]);
+ 		cache_get_value_name(i,"Name",gps[i][description], 64);
 		cache_get_value_name_int(i,"Created", gps[i][used]);
 		cache_get_value_name_float(i,"Pos_x", gps[i][pos][0]);
 		cache_get_value_name_float(i,"Pos_y", gps[i][pos][1]);
@@ -11360,7 +11353,7 @@ public garage_Load()
 	for (new i=0; i<totalGarages; i++)
 	{
 		cache_get_value_name_int(i, "Created", garage[i][used]);
-		cache_get_value_name(i,"Owner",garage[i][owner]);
+		cache_get_value_name(i,"Owner",garage[i][owner], 32);
 		cache_get_value_name_float(i, "Pos_x", garage[i][pos][0]);
 		cache_get_value_name_float(i, "Pos_y", garage[i][pos][1]);
 		cache_get_value_name_float(i, "Pos_z", garage[i][pos][2]);
@@ -11418,7 +11411,7 @@ public tag_Load()
 	cache_get_row_count(totalTags);
 	for (new i=0; i<totalTags; i++)
 	{
-	    cache_get_value_name(i,"Description",tag[i][description]);
+	    cache_get_value_name(i,"Description",tag[i][description], 64);
 	    cache_get_value_name_int(i, "FontSize", tag[i][fontSize]);
 		cache_get_value_name_int(i, "FactionId", tag[i][faction]);
 		cache_get_value_name_int(i, "Used", tag[i][used]);
@@ -11480,7 +11473,7 @@ public gate_Load()
 		cache_get_value_name_int(i, "Model", gate[i][model]);
 		cache_get_value_name_int(i, "Type", gate[i][typeZ]);
 		cache_get_value_name_int(i, "ActionZ", gate[i][action]);
-		cache_get_value_name(i,"Text",gate[i][description]);
+		cache_get_value_name(i,"Text",gate[i][description], 64);
 		cache_get_value_name_int(i, "VariableZ", gate[i][variable]);
 		cache_get_value_name_int(i, "UseTimer", gate[i][useTimer]);
 		cache_get_value_name_float(i, "RangeZ", gate[i][distanceZ]);
@@ -11521,12 +11514,12 @@ public sign_Load()
 		cache_get_value_name_float(i, "Rot_x", sign[i][pos][3]);
 		cache_get_value_name_float(i, "Rot_y", sign[i][pos][4]);
 		cache_get_value_name_float(i, "Rot_z", sign[i][pos][5]);
-		cache_get_value_name(i,"Text",sign[i][description]);
+		cache_get_value_name(i,"Text",sign[i][description], 64);
 		cache_get_value_name_int(i, "Size", sign[i][size]);
 		cache_get_value_name_int(i, "mIndex", sign[i][indexNum]);
 		cache_get_value_name_int(i, "UseBold", sign[i][bold]);
 		cache_get_value_name_int(i, "Align", sign[i][alignement]);
-		cache_get_value_name(i,"FontName",sign[i][fontName]);
+		cache_get_value_name(i,"FontName",sign[i][fontName], 32);
 		cache_get_value_name_int(i, "FontSize", sign[i][fontSize]);
 		cache_get_value_name_int(i, "TextColor", sign[i][textColor]);
 		cache_get_value_name_int(i, "BackColor", sign[i][backColor]);
@@ -11741,10 +11734,10 @@ stock inscription_Question(playerid)
 	new question[64],reponse1[64],reponse2[64],reponse3[64];
 	format(sql,sizeof(sql), "SELECT * FROM lvrp_server_questions WHERE id=%d",inscription_Random[inscription_RandomList[playerid]][inscription_QuestionNumber[playerid]]);
     mysql_query(MYSQL,sql);
-	cache_get_value_name(0,"question",question);
-	cache_get_value_name(0,"R1",reponse1);
-	cache_get_value_name(0,"R2",reponse2);
-	cache_get_value_name(0,"R3",reponse3);
+	cache_get_value_name(0,"question",question, 128);
+	cache_get_value_name(0,"R1",reponse1, 128);
+	cache_get_value_name(0,"R2",reponse2, 128);
+	cache_get_value_name(0,"R3",reponse3, 128);
 	cache_get_value_name_int(0, "reponseJuste", inscription_ValidQuestion[playerid]);
 
 	new dialogStr[256],titledialog[256];
@@ -12454,7 +12447,7 @@ public MySQLGetNameWithId(sql_id,resultName[MAX_PLAYER_NAME])
 	if (tmp == 0)
 		{return 0;}
 	else
- 		{cache_get_value_name(0,"Name",resultName);return 1;}
+ 		{cache_get_value_name(0,"Name",resultName, 32);return 1;}
 }
 
 public MySQLCheckChar(string[])
@@ -16736,7 +16729,7 @@ public OnPlayerLogin(playerid,pass[])
 		new count = 0;
 		if(cache_get_row_count(count) && count > 0)
 		{
-		    cache_get_value_name(0,"Pass",PlayerInfo[playerid][pKey]);
+		    cache_get_value_name(0,"Pass",PlayerInfo[playerid][pKey], 64);
 		    cache_get_value_name_int(0,"Level", PlayerInfo[playerid][pLevel]);
 		    cache_get_value_name_int(0,"AdminLevel", PlayerInfo[playerid][pAdmin]);
 		    cache_get_value_name_int(0,"Age", PlayerInfo[playerid][pAge]);
@@ -16871,7 +16864,7 @@ public OnPlayerLogin(playerid,pass[])
 			
 			cache_get_value_name_int(0,"CanRobTimeBizz", PlayerInfo[playerid][pRobTimeBizz]);
 			cache_get_value_name_int(0,"Locked", PlayerInfo[playerid][pLocked]);
-			cache_get_value_name(0,"Email",PlayerInfo[playerid][pEmail]);
+			cache_get_value_name(0,"Email",PlayerInfo[playerid][pEmail], 64);
 			cache_get_value_name_int(0,"CombatStyle", PlayerInfo[playerid][pCombatStyle]);
 			cache_get_value_name_int(0,"Bag", PlayerInfo[playerid][pBag]);
 			cache_get_value_name_int(0,"DutyTime", PlayerInfo[playerid][pDutyTime]);
@@ -16961,7 +16954,7 @@ public OnPlayerLogin(playerid,pass[])
 		SetPlayerWantedLevel(playerid,PlayerInfo[playerid][pWanted]);
 		format(sql,sizeof(sql),"SELECT Crime1 FROM lvrp_users_casiers WHERE SQLid=%d LIMIT 1",PlayerInfo[playerid][pSQLID]);
 		mysql_query(MYSQL,sql);
-		cache_get_value_name(0,"Crime1",crime);
+		cache_get_value_name(0,"Crime1",crime, 64);
 		 	
 		format(string2,sizeof(string2),"{CF9756}» Info «{FFFFFF} Vous êtes toujours soupçonné de : %s",crime);
 		msg_Client(playerid,COLOR_INFO,string2);
@@ -18955,7 +18948,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
 			mysql_query(MYSQL,sql);
 			new count = 0;
 			if(cache_get_row_count(count) && count > 0)
-				{cache_get_value_name(0,"LastLog",Field); format(Date,sizeof(Date),"%s",date(strval(Field),1));}
+				{cache_get_value_name(0,"LastLog",Field, 32); format(Date,sizeof(Date),"%s",date(strval(Field),1));}
 
 			if(vehicle[idcar][cOwned] == 0){format(Owner,sizeof(Owner),"A vendre (0)"); format(tmpOwner,sizeof(tmpOwner),"A vendre");}
 			else if(vehicle[idcar][cOwned] == 1){format(Owner,sizeof(Owner),"A un joueur (1) [%s]\nDernière connexion : %s",vehicle[idcar][cOwner],Date);}
@@ -27060,7 +27053,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
      	cache_get_row_count(tmpTotal);
 	    for (new i=0; i<tmpTotal; i++)
 		{
-		    cache_get_value_name(i,"Name",name);
+		    cache_get_value_name(i,"Name",name, 32);
       		cache_get_value_name_int(i, "Connected", tmp2);
 			if(tmp2 == 1)	{connected="{00FF00}Connecté";}
 			else													{connected="{FF0000}Déconnecté";}
@@ -34069,31 +34062,31 @@ public OnPlayerCommandText(playerid, cmdtext[])
 	    format(sql,sizeof(sql),"SELECT * FROM lvrp_users_casiers WHERE SQLid = %d",PlayerInfo[playerid][pSQLID]);
 	    mysql_query(MYSQL,sql);
 	    strins(string,"{CF9756}[Dernier crime]{FFFFFF}\n- Motif : ",strlen(string),sizeof(string));
-	    cache_get_value_name(0,"Crime1",tmpstring);
+	    cache_get_value_name(0,"Crime1",tmpstring, 64);
 	    strins(string,tmpstring,strlen(string),sizeof(string));
 	    strins(string,"\n- Victime : ",strlen(string),sizeof(string));
-	    cache_get_value_name(0,"Victim",tmpstring);
+	    cache_get_value_name(0,"Victim",tmpstring, 64);
 	    strins(string,tmpstring,strlen(string),sizeof(string));
 	    strins(string,"\n- Témoin : ",strlen(string),sizeof(string));
-	    cache_get_value_name(0,"Witness",tmpstring);
+	    cache_get_value_name(0,"Witness",tmpstring, 64);
 	    strins(string,tmpstring,strlen(string),sizeof(string));
 	    strins(string,"\n\n{CF9756}[Autres crimes]{FFFFFF}\n- ",strlen(string),sizeof(string));
-	    cache_get_value_name(0,"Crime2",tmpstring);
+	    cache_get_value_name(0,"Crime2",tmpstring, 64);
 	    strins(string,tmpstring,strlen(string),sizeof(string));
 	    strins(string,"\n- ",strlen(string),sizeof(string));
-	    cache_get_value_name(0,"Crime3",tmpstring);
+	    cache_get_value_name(0,"Crime3",tmpstring, 64);
 	    strins(string,tmpstring,strlen(string),sizeof(string));
 	    strins(string,"\n- ",strlen(string),sizeof(string));
-	    cache_get_value_name(0,"Crime4",tmpstring);
+	    cache_get_value_name(0,"Crime4",tmpstring, 64);
 	    strins(string,tmpstring,strlen(string),sizeof(string));
 	    strins(string,"\n- ",strlen(string),sizeof(string));
-	    cache_get_value_name(0,"Crime5",tmpstring);
+	    cache_get_value_name(0,"Crime5",tmpstring, 64);
 	    strins(string,tmpstring,strlen(string),sizeof(string));
 	    strins(string,"\n\n{CF9756}[Autres stats]{FFFFFF}\n- Nombre de fois arrêté : ",strlen(string),sizeof(string));
-	    cache_get_value_name(0,"Arrested",tmpstring);
+	    cache_get_value_name(0,"Arrested",tmpstring, 64);
 	    strins(string,tmpstring,strlen(string),sizeof(string));
 	    strins(string,"\n- Nombre de crimes : ",strlen(string),sizeof(string));
-	    cache_get_value_name(0,"Crimes",tmpstring);
+	    cache_get_value_name(0,"Crimes",tmpstring, 64);
 	    strins(string,tmpstring,strlen(string),sizeof(string));
 	    ShowPlayerDialog(playerid,999,DIALOG_STYLE_MSGBOX,"{FFFFFF}» Casier «",string,"Valider","");
 	    return 1;
@@ -34112,7 +34105,7 @@ public OnPlayerCommandText(playerid, cmdtext[])
  		new tmp2 = 0, tmp3 = 0, rank = 0;
 	    for (new i=0; i<tmpTotal; i++)
 		{
-		    cache_get_value_name(i,"Name",name);
+		    cache_get_value_name(i,"Name",name, 32);
       		cache_get_value_name_int(i, "Connected", tmp3);
       		cache_get_value_name_int(i, "LastLog", tmp2);
       		cache_get_value_name_int(i, "Rank", rank);
@@ -40144,13 +40137,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(cache_get_row_count(count) && count > 0)
 		{
 		    new crime1[64],crime2[64],crime3[64],crime4[64],crime5[64],victim[64],witness[64],nbcrime,nbarrest;
-		    cache_get_value_name(0,"Crime1",crime1);
-		    cache_get_value_name(0,"Crime2",crime2);
-		    cache_get_value_name(0,"Crime3",crime3);
-			cache_get_value_name(0,"Crime4",crime4);
-		    cache_get_value_name(0,"Crime5",crime5);
-		    cache_get_value_name(0,"Witness",witness);
-		    cache_get_value_name(0,"Victim",victim);
+		    cache_get_value_name(0,"Crime1",crime1, 64);
+		    cache_get_value_name(0,"Crime2",crime2, 64);
+		    cache_get_value_name(0,"Crime3",crime3, 64);
+			cache_get_value_name(0,"Crime4",crime4, 64);
+		    cache_get_value_name(0,"Crime5",crime5, 64);
+		    cache_get_value_name(0,"Witness",witness, 32);
+		    cache_get_value_name(0,"Victim",victim, 32);
 	     	cache_get_value_name_int(0,"Crimes", nbcrime);
 	     	cache_get_value_name_int(0,"Arrested", nbarrest);
 		    format(string,sizeof(string),"Nom : %s\nCrime(s) commis : %d\nArrestation(s) : %d\n\nCrime actuel : %s\nVictime : %s\nTémoin : %s\n\nAnciens crimes :\n%s\n%s\n%s\n%s",
@@ -42462,7 +42455,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		  			mysql_query(MYSQL,sql);
 		  			new count = 0;
      				if(cache_get_row_count(count) && count > 0)
-						{cache_get_value_name(0,"LastLog",Field); format(Date,sizeof(Date),"%s",date(strval(Field),1));}
+						{cache_get_value_name(0,"LastLog",Field, 32); format(Date,sizeof(Date),"%s",date(strval(Field),1));}
 					format(typeowned,sizeof(typeowned),"Acheter - Dernière connexion : %s",Date);
 				}
 					
@@ -44618,7 +44611,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		        for(new i=0; i<tmpTotal; i++)
 				{
 				    cache_get_value_name_int(i,"id", house_ExitTenant[playerid][ifx]);
-					cache_get_value_name(i,"Name",Field);
+					cache_get_value_name(i,"Name",Field, 32);
 				    format(tmpstring,sizeof(tmpstring),"%s\n",Field);
 					strins(locstring,tmpstring,strlen(locstring),sizeof(locstring));
 					ifx++;
@@ -52447,28 +52440,28 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 		    if(phone_Text[playerid]==1)
 		    {
 		        if(playertextid == phone_BackSMS[playerid][0])
-		       		{cache_get_value_name(0,"SMS_Received_Msg1",Text); cache_get_value_name_int(0,"SMS_Received_Num1", Num);cache_get_value_name_int(0,"SMS_Received_Date1", Date);}
+		       		{cache_get_value_name(0,"SMS_Received_Msg1",Text, 128); cache_get_value_name_int(0,"SMS_Received_Num1", Num);cache_get_value_name_int(0,"SMS_Received_Date1", Date);}
                 else if(playertextid == phone_BackSMS[playerid][1])
-		       		{cache_get_value_name(0,"SMS_Received_Msg2",Text); cache_get_value_name_int(0,"SMS_Received_Num2", Num);cache_get_value_name_int(0,"SMS_Received_Date2", Date);}
+		       		{cache_get_value_name(0,"SMS_Received_Msg2",Text, 128); cache_get_value_name_int(0,"SMS_Received_Num2", Num);cache_get_value_name_int(0,"SMS_Received_Date2", Date);}
                 else if(playertextid == phone_BackSMS[playerid][2])
-		       		{cache_get_value_name(0,"SMS_Received_Msg3",Text); cache_get_value_name_int(0,"SMS_Received_Num3", Num);cache_get_value_name_int(0,"SMS_Received_Date3", Date);}
+		       		{cache_get_value_name(0,"SMS_Received_Msg3",Text, 128); cache_get_value_name_int(0,"SMS_Received_Num3", Num);cache_get_value_name_int(0,"SMS_Received_Date3", Date);}
                 else if(playertextid == phone_BackSMS[playerid][3])
-		       		{cache_get_value_name(0,"SMS_Received_Msg4",Text); cache_get_value_name_int(0,"SMS_Received_Num4", Num);cache_get_value_name_int(0,"SMS_Received_Date4", Date);}
+		       		{cache_get_value_name(0,"SMS_Received_Msg4",Text, 128); cache_get_value_name_int(0,"SMS_Received_Num4", Num);cache_get_value_name_int(0,"SMS_Received_Date4", Date);}
                 else if(playertextid == phone_BackSMS[playerid][4])
-		       		{cache_get_value_name(0,"SMS_Received_Msg5",Text); cache_get_value_name_int(0,"SMS_Received_Num5", Num);cache_get_value_name_int(0,"SMS_Received_Date5", Date);}
+		       		{cache_get_value_name(0,"SMS_Received_Msg5",Text, 128); cache_get_value_name_int(0,"SMS_Received_Num5", Num);cache_get_value_name_int(0,"SMS_Received_Date5", Date);}
 		    }
 		    else if(phone_Text[playerid]==2)
 		    {
 		        if(playertextid == phone_BackSMS[playerid][0])
-		       		{cache_get_value_name(0,"SMS_Sent_Msg1",Text);cache_get_value_name_int(0,"SMS_Sent_Num1", Num);cache_get_value_name_int(0,"SMS_Sent_Date1", Date);}
+		       		{cache_get_value_name(0,"SMS_Sent_Msg1",Text, 128);cache_get_value_name_int(0,"SMS_Sent_Num1", Num);cache_get_value_name_int(0,"SMS_Sent_Date1", Date);}
                 else if(playertextid == phone_BackSMS[playerid][1])
-		       		{cache_get_value_name(0,"SMS_Sent_Msg2",Text);cache_get_value_name_int(0,"SMS_Sent_Num1", Num);cache_get_value_name_int(0,"SMS_Sent_Date1", Date);}
+		       		{cache_get_value_name(0,"SMS_Sent_Msg2",Text, 128);cache_get_value_name_int(0,"SMS_Sent_Num1", Num);cache_get_value_name_int(0,"SMS_Sent_Date1", Date);}
                 else if(playertextid == phone_BackSMS[playerid][2])
-		       		{cache_get_value_name(0,"SMS_Sent_Msg3",Text);cache_get_value_name_int(0,"SMS_Sent_Num1", Num);cache_get_value_name_int(0,"SMS_Sent_Date1", Date);}
+		       		{cache_get_value_name(0,"SMS_Sent_Msg3",Text, 128);cache_get_value_name_int(0,"SMS_Sent_Num1", Num);cache_get_value_name_int(0,"SMS_Sent_Date1", Date);}
                 else if(playertextid == phone_BackSMS[playerid][3])
-		       		{cache_get_value_name(0,"SMS_Sent_Msg4",Text);cache_get_value_name_int(0,"SMS_Sent_Num1", Num);cache_get_value_name_int(0,"SMS_Sent_Date1", Date);}
+		       		{cache_get_value_name(0,"SMS_Sent_Msg4",Text, 128);cache_get_value_name_int(0,"SMS_Sent_Num1", Num);cache_get_value_name_int(0,"SMS_Sent_Date1", Date);}
                 else if(playertextid == phone_BackSMS[playerid][4])
-		       		{cache_get_value_name(0,"SMS_Sent_Msg5",Text);cache_get_value_name_int(0,"SMS_Sent_Num1", Num);cache_get_value_name_int(0,"SMS_Sent_Date1", Date);}
+		       		{cache_get_value_name(0,"SMS_Sent_Msg5",Text, 128);cache_get_value_name_int(0,"SMS_Sent_Num1", Num);cache_get_value_name_int(0,"SMS_Sent_Date1", Date);}
 		    }
 		    format(string,sizeof(string),"{00FFFA}Message : {FFFFFF}%s\n{00FFFA}Expéditeur : {FFFFFF}%d\n{00FFFA}Date : {FFFFFF}%s",Text,Num,date(Date,1));
 			ShowPlayerDialog(playerid,999,DIALOG_STYLE_MSGBOX,"|SMS|",string,"Valider","");
@@ -52580,18 +52573,18 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 		new count = 0;
 		if(cache_get_row_count(count) && count > 0)
 		{
-		    cache_get_value_name(0,"Contact1",Text[0]); cache_get_value_name_int(0,"Contact_Num1", Num[0]);
-		    cache_get_value_name(0,"Contact2",Text[1]); cache_get_value_name_int(0,"Contact_Num2", Num[1]);
-		    cache_get_value_name(0,"Contact3",Text[2]); cache_get_value_name_int(0,"Contact_Num3", Num[2]);
-		    cache_get_value_name(0,"Contact4",Text[3]); cache_get_value_name_int(0,"Contact_Num4", Num[3]);
-		    cache_get_value_name(0,"Contact5",Text[4]); cache_get_value_name_int(0,"Contact_Num5", Num[4]);
-		    cache_get_value_name(0,"Contact6",Text[5]); cache_get_value_name_int(0,"Contact_Num6", Num[5]);
-		    cache_get_value_name(0,"Contact7",Text[6]); cache_get_value_name_int(0,"Contact_Num7", Num[6]);
-		    cache_get_value_name(0,"Contact8",Text[7]); cache_get_value_name_int(0,"Contact_Num8", Num[7]);
-		    cache_get_value_name(0,"Contact9",Text[8]); cache_get_value_name_int(0,"Contact_Num9", Num[8]);
-		    cache_get_value_name(0,"Contact10",Text[9]); cache_get_value_name_int(0,"Contact_Num10", Num[9]);
-		    cache_get_value_name(0,"Contact11",Text[10]); cache_get_value_name_int(0,"Contact_Num11", Num[10]);
-		    cache_get_value_name(0,"Contact12",Text[11]); cache_get_value_name_int(0,"Contact_Num12", Num[11]);
+		    cache_get_value_name(0,"Contact1",Text[0], 32); cache_get_value_name_int(0,"Contact_Num1", Num[0]);
+		    cache_get_value_name(0,"Contact2",Text[1], 32); cache_get_value_name_int(0,"Contact_Num2", Num[1]);
+		    cache_get_value_name(0,"Contact3",Text[2], 32); cache_get_value_name_int(0,"Contact_Num3", Num[2]);
+		    cache_get_value_name(0,"Contact4",Text[3], 32); cache_get_value_name_int(0,"Contact_Num4", Num[3]);
+		    cache_get_value_name(0,"Contact5",Text[4], 32); cache_get_value_name_int(0,"Contact_Num5", Num[4]);
+		    cache_get_value_name(0,"Contact6",Text[5], 32); cache_get_value_name_int(0,"Contact_Num6", Num[5]);
+		    cache_get_value_name(0,"Contact7",Text[6], 32); cache_get_value_name_int(0,"Contact_Num7", Num[6]);
+		    cache_get_value_name(0,"Contact8",Text[7], 32); cache_get_value_name_int(0,"Contact_Num8", Num[7]);
+		    cache_get_value_name(0,"Contact9",Text[8], 32); cache_get_value_name_int(0,"Contact_Num9", Num[8]);
+		    cache_get_value_name(0,"Contact10",Text[9], 32); cache_get_value_name_int(0,"Contact_Num10", Num[9]);
+		    cache_get_value_name(0,"Contact11",Text[10], 32); cache_get_value_name_int(0,"Contact_Num11", Num[10]);
+		    cache_get_value_name(0,"Contact12",Text[11], 32); cache_get_value_name_int(0,"Contact_Num12", Num[11]);
 		}
 		format(string,sizeof(string),"- %s(~r~%d~w~)",Text[0],Num[0]);
 		PlayerTextDrawSetString(playerid,phone_Contact[playerid][1],string);
@@ -52636,7 +52629,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 	  	new count = 0;
 		if(cache_get_row_count(count) && count > 0)
 		{
-		    cache_get_value_name(0,"SMS_Received_Msg1",Text_SMS[0]);cache_get_value_name(0,"SMS_Received_Msg2",Text_SMS[1]);cache_get_value_name(0,"SMS_Received_Msg3",Text_SMS[2]);cache_get_value_name(0,"SMS_Received_Msg4",Text_SMS[3]);cache_get_value_name(0,"SMS_Received_Msg5",Text_SMS[4]);
+		    cache_get_value_name(0,"SMS_Received_Msg1",Text_SMS[0], 128);cache_get_value_name(0,"SMS_Received_Msg2",Text_SMS[1], 128);cache_get_value_name(0,"SMS_Received_Msg3",Text_SMS[2], 128);cache_get_value_name(0,"SMS_Received_Msg4",Text_SMS[3], 128);cache_get_value_name(0,"SMS_Received_Msg5",Text_SMS[4], 128);
 		    cache_get_value_name_int(0,"SMS_Received_Num1", Num[0]); cache_get_value_name_int(0,"SMS_Received_Num2", Num[1]); cache_get_value_name_int(0,"SMS_Received_Num3", Num[2]); cache_get_value_name_int(0,"SMS_Received_Num4", Num[3]); cache_get_value_name_int(0,"SMS_Received_Num5", Num[4]);
             cache_get_value_name_int(0,"SMS_Received_Date1", Date[0]); cache_get_value_name_int(0,"SMS_Received_Date2", Date[1]); cache_get_value_name_int(0,"SMS_Received_Date3", Date[2]); cache_get_value_name_int(0,"SMS_Received_Date4", Date[3]); cache_get_value_name_int(0,"SMS_Received_Date5", Date[4]);
             strdel(Text_SMS[0], 20, 128);strdel(Text_SMS[1], 20, 128);strdel(Text_SMS[2], 20, 128);strdel(Text_SMS[3], 20, 128);strdel(Text_SMS[4], 20, 128);
@@ -52676,7 +52669,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 	  	new count = 0;
 		if(cache_get_row_count(count) && count > 0)
 		{
-		    cache_get_value_name(0,"SMS_Sent_Msg1",Text1);cache_get_value_name(0,"SMS_Sent_Msg2",Text2);cache_get_value_name(0,"SMS_Sent_Msg3",Text3);cache_get_value_name(0,"SMS_Sent_Msg4",Text4);cache_get_value_name(0,"SMS_Sent_Msg5",Text5);
+		    cache_get_value_name(0,"SMS_Sent_Msg1",Text1, 128);cache_get_value_name(0,"SMS_Sent_Msg2",Text2, 128);cache_get_value_name(0,"SMS_Sent_Msg3",Text3, 128);cache_get_value_name(0,"SMS_Sent_Msg4",Text4, 128);cache_get_value_name(0,"SMS_Sent_Msg5",Text5, 128);
 		    cache_get_value_name_int(0,"SMS_Sent_Num1", Num[0]); cache_get_value_name_int(0,"SMS_Sent_Num2", Num[1]); cache_get_value_name_int(0,"SMS_Sent_Num3", Num[2]); cache_get_value_name_int(0,"SMS_Sent_Num4", Num[3]); cache_get_value_name_int(0,"SMS_Sent_Num5", Num[4]);
             cache_get_value_name_int(0,"SMS_Sent_Date1", Date[0]); cache_get_value_name_int(0,"SMS_Sent_Date2", Date[1]); cache_get_value_name_int(0,"SMS_Sent_Date3", Date[2]); cache_get_value_name_int(0,"SMS_Sent_Date4", Date[3]); cache_get_value_name_int(0,"SMS_Sent_Date5", Date[4]);
             strdel(Text1, 20, 128);strdel(Text2, 20, 128);strdel(Text3, 20, 128);strdel(Text4, 20, 128);strdel(Text5, 20, 128);
@@ -58165,11 +58158,11 @@ public vehicle_LoadPlayer(playerid)
 	vehicle[vehicleid][cAngle] = a;
 	cache_get_value_name_int(0,"Color1", vehicle[vehicleid][cColorOne]);
 	cache_get_value_name_int(0,"Color2", vehicle[vehicleid][cColorTwo]);
-	cache_get_value_name(0,"Owner",vehicle[vehicleid][cOwner]);
+	cache_get_value_name(0,"Owner",vehicle[vehicleid][cOwner], 32);
 	cache_get_value_name_int(0,"SQLID", vehicle[vehicleid][ownerSQLID]);
-	cache_get_value_name(0,"Description",vehicle[vehicleid][cDescription]);
+	cache_get_value_name(0,"Description",vehicle[vehicleid][cDescription], 32);
 	cache_get_value_name_int(0,"Price", vehicle[vehicleid][cValue]);
-	cache_get_value_name(0,"License",vehicle[vehicleid][cLicense]);
+	cache_get_value_name(0,"License",vehicle[vehicleid][cLicense], 24);
 	cache_get_value_name_int(0,"Owned", vehicle[vehicleid][cOwned]);
 	cache_get_value_name_int(0,"Locked", vehicle[vehicleid][cLock]);
 	cache_get_value_name_int(0,"Statut", vehicle[vehicleid][cStatut]);
@@ -58293,11 +58286,11 @@ public vehicle_Load()
 	 	cache_get_value_name_float(i,"Angle", vehicle[totalVehicles][cAngle]);
 		cache_get_value_name_int(i,"Color1", vehicle[totalVehicles][cColorOne]);
 		cache_get_value_name_int(i,"Color2", vehicle[totalVehicles][cColorTwo]);
-		cache_get_value_name(i,"Owner",vehicle[totalVehicles][cOwner]);
+		cache_get_value_name(i,"Owner",vehicle[totalVehicles][cOwner], 32);
 		cache_get_value_name_int(i,"SQLID", vehicle[totalVehicles][ownerSQLID]);
-		cache_get_value_name(i,"Description",vehicle[totalVehicles][cDescription]);
+		cache_get_value_name(i,"Description",vehicle[totalVehicles][cDescription], 128);
 		cache_get_value_name_int(i,"Price", vehicle[totalVehicles][cValue]);
-		cache_get_value_name(i,"License",vehicle[totalVehicles][cLicense]);
+		cache_get_value_name(i,"License",vehicle[totalVehicles][cLicense], 24);
 		cache_get_value_name_int(i,"Owned", vehicle[totalVehicles][cOwned]);
 		cache_get_value_name_int(i,"Locked", vehicle[totalVehicles][cLock]);
 		cache_get_value_name_int(i,"Statut", vehicle[totalVehicles][cStatut]);
