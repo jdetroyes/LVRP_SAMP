@@ -42,7 +42,7 @@ msg_Client(playerid, COLOR_WHITE, "{FF6347}� Admin �{FFFFB2} voiture - biz -
 2. __Inscription depuis la site__
 
 * Vous avez mal connecter la GameMode à la base de données
-* Rendez-vous dans la base données dans la table "_lvrp_server_setting_" et modifier le champ "_inscription_" à 1.
+* Rendez-vous dans la base données dans la table "_lvrp_server_setting_" et modifier le champ "_inscription_" à __1__.
   
 3. __"Ce joueur n'est pas connecté"__
 
@@ -71,6 +71,6 @@ Utilisez les commandes /a creer porte, /a editer porte et //a supprimer porte po
 6. __Comment être administrateur ?__
 
 * Créez votre compte en jeu ou sur l'un des ucp.
-* Rendez-vous dans la table "lvrp_users" et modifier le champ "AdminLevel" de votre compte à 7.
+* Rendez-vous dans la table "_lvrp_users_" et modifier le champ "_AdminLevel_" de votre compte à __7__.
 
 
