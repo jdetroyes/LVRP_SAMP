@@ -6,7 +6,7 @@ Mode de jeu développé en Pawn fonctionnant sous SA-MP. (http://sa-mp.com/)
 
 **Version Game Mode:** 5.0.2
 
-**Vesion SAMP :** 0.3.7-R2
+**Version SAMP :** 0.3.7-R2
 
 ## Requis ##
 * [Mysql Plugin r41-2 ou plus](http://forum.sa-mp.com/showthread.php?t=56564)
